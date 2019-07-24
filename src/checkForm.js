@@ -30,41 +30,18 @@ export default class checkForm{
       e.preventDefault();
       e.stopPropagation();
       if (self.form_btn.getAttribute("disabled") === null) {
-        // // self.form_btn.click();
-        // console.log("post処理しようね");
-        // fetch("/", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/ x-www-form-urlencoded; charset=UTF-8" },
-        //   body: JSON.stringify({ "name": self.account_name, "age": 10 })
-        // }).then((res) => {
-        //   console.log("post complete!");
-        // });
-        // なんかうまいくいかんよ ajaxする
-        let fd = new FormData();
-        console.log("これをpostします", self.account_name);
-        // fd.append(name, self.account_name);
-        jQuery.ajax({
-          url: "/",
-          type: "POST",
-          // data: fd,
-          data: JSON.stringify({name: self.account_name}),
-          dataType: "json",
-          mode: 'multiple',
-          processData: false,
-          contentType: "application/json; charset=UTF-8",
-          timeout: 1000,
-          beforeSend: function (xhr) {
-          },
-          error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(textStatus);
-            console.log(errorThrown.message);
-          }
-        }).done((res) => {
-          console.log("どうでしょうか");
-          console.log(res);
-          if (res.status === "success" && res.name) {
-            self.label_alt.textContent = res.name;
+        fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json; charset=UTF-8" },
+          body: JSON.stringify({ "name": self.account_name, "age": 10 })
+        }).then((res) => {
+          console.log("post complete!");
+          console.log(res.headers.get('Content-Type'));
+          return res.json();
+        }).then((body) => {
+          console.log(body);
+          if (body.status === "success" && body.name) {
+            self.label_alt.textContent = body.name;
           }
         });
       } else {
