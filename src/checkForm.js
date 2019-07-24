@@ -41,19 +41,17 @@ export default class checkForm{
         // });
         // なんかうまいくいかんよ ajaxする
         let fd = new FormData();
-        fd.append("name", self.account_name);
+        console.log("これをpostします", self.account_name);
+        // fd.append(name, self.account_name);
         jQuery.ajax({
-          url: "",
+          url: "/",
           type: "POST",
-          // data: JSON.stringify({"name": self.account_name}),
-          data: fd,
-          // dataType: "json",
-          // dataTypeとcontentTypeは無かったら自動的に入れてくれるらしい
+          // data: fd,
+          data: JSON.stringify({name: self.account_name}),
+          dataType: "json",
           mode: 'multiple',
           processData: false,
-          // contentType: false,
-          // contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-          // contentType: "application/json; charset=UTF-8",
+          contentType: "application/json; charset=UTF-8",
           timeout: 1000,
           beforeSend: function (xhr) {
           },
@@ -65,6 +63,9 @@ export default class checkForm{
         }).done((res) => {
           console.log("どうでしょうか");
           console.log(res);
+          if (res.status === "success" && res.name) {
+            self.label_alt.textContent = res.name;
+          }
         });
       } else {
         console.log("submitできないよ");

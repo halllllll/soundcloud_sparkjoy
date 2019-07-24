@@ -7,11 +7,19 @@ router.get('/', function(req, res, next) {
 });
 
 /* POST */
-router.post("/", (req, res, next) => {
+router.post("", (req, res, next) => {
   // console.log("postにきたわけですけども"); 
-  let ret = req.body.name;
+  let ret = req.body;
   console.log("こちらもらったものです", ret);
-  res.send(ret);
+  // これkeyはダブルクォーテーションで囲っちゃいけないんだな
+  res.send({name: ret.name, status: "success"});
+  /* 
+  res.json({
+    status: "success",
+    name: ret.name,
+    ret: ret,
+  });
+  */
 });
 
 module.exports = router;
