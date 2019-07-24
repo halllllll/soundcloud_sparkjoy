@@ -1,3 +1,5 @@
+import jQuery from "jquery";
+
 export default class checkForm{
   constructor(account_form, form_btn, label_alt, myform) {
     this.account_form = account_form;
@@ -15,16 +17,59 @@ export default class checkForm{
       const self = this;
       this.preventSubmit(self, e);
     });
+
+    this.form_btn.addEventListener("click", (e) => {
+      const self = this;
+      
+    });
   }
 
   preventSubmit(self, e) {
     if (e.which == 13) {
+      console.log("やろうね");
       e.preventDefault();
+      e.stopPropagation();
       if (self.form_btn.getAttribute("disabled") === null) {
-        // self.form_btn.click();
+        // // self.form_btn.click();
+        // console.log("post処理しようね");
+        // fetch("/", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/ x-www-form-urlencoded; charset=UTF-8" },
+        //   body: JSON.stringify({ "name": self.account_name, "age": 10 })
+        // }).then((res) => {
+        //   console.log("post complete!");
+        // });
+        // なんかうまいくいかんよ ajaxする
+        let fd = new FormData();
+        fd.append("name", self.account_name);
+        jQuery.ajax({
+          url: "",
+          type: "POST",
+          // data: JSON.stringify({"name": self.account_name}),
+          data: fd,
+          // dataType: "json",
+          // dataTypeとcontentTypeは無かったら自動的に入れてくれるらしい
+          mode: 'multiple',
+          processData: false,
+          // contentType: false,
+          // contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+          // contentType: "application/json; charset=UTF-8",
+          timeout: 1000,
+          beforeSend: function (xhr) {
+          },
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(textStatus);
+            console.log(errorThrown.message);
+          }
+        }).done((res) => {
+          console.log("どうでしょうか");
+          console.log(res);
+        });
       } else {
-
+        console.log("submitできないよ");
       }
+      return;
     }    
   }
 
@@ -33,11 +78,11 @@ export default class checkForm{
     if (this.isInvalidname(this.account_name)) {
       self.form_btn.setAttribute("disabled", true);
       self.label_alt.textContent = "invalid name.";
-      if (this.account_name == "") self.label_alt.textContent = "";
+      if (this.account_name === "") self.label_alt.textContent = " ";
       return;
     }
     self.form_btn.removeAttribute("disabled");
-    self.label_alt.textContent = "";
+    self.label_alt.textContent = " ";
   }
 
 
