@@ -19,36 +19,40 @@ export default class checkForm{
     });
 
     this.form_btn.addEventListener("click", (e) => {
-      const self = this;
-      
+      const self = this; 
+      this.submitAsync(self, e);
     });
+  }
+
+  submitAsync(self, e) {
+    console.log("やろうね");
+    e.preventDefault();
+    e.stopPropagation();
+    if (self.form_btn.getAttribute("disabled") === null) {
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        body: JSON.stringify({ "name": self.account_name, "age": 10 })
+      }).then((res) => {
+        console.log("post complete!");
+        console.log(res.headers.get('Content-Type'));
+        return res.json();
+      }).then((body) => {
+        console.log(body);
+        if (body.status === "success" && body.name) {
+          self.label_alt.textContent = body.name;
+        }
+      });
+    } else {
+      console.log("submitできないよ");
+    }
+    return;
   }
 
   preventSubmit(self, e) {
     if (e.which == 13) {
-      console.log("やろうね");
-      e.preventDefault();
-      e.stopPropagation();
-      if (self.form_btn.getAttribute("disabled") === null) {
-        fetch("/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json; charset=UTF-8" },
-          body: JSON.stringify({ "name": self.account_name, "age": 10 })
-        }).then((res) => {
-          console.log("post complete!");
-          console.log(res.headers.get('Content-Type'));
-          return res.json();
-        }).then((body) => {
-          console.log(body);
-          if (body.status === "success" && body.name) {
-            self.label_alt.textContent = body.name;
-          }
-        });
-      } else {
-        console.log("submitできないよ");
-      }
-      return;
-    }    
+      this.submitAsync(self, e);
+    }
   }
 
   listenOn(self, e) { 
