@@ -1,5 +1,3 @@
-import jQuery from "jquery";
-
 export default class checkForm{
   constructor(account_form, form_btn, label_alt, myform) {
     this.account_form = account_form;
@@ -50,12 +48,12 @@ export default class checkForm{
   }
 
   preventSubmit(self, e) {
-    if (e.which == 13) {
-      this.submitAsync(self, e);
+    if (e.which === 13) {
+      e.preventDefault();
     }
   }
 
-  listenOn(self, e) { 
+  listenOn(self, e) {
     this.account_name = self.account_form.value.trim();
     if (this.isInvalidname(this.account_name)) {
       self.form_btn.setAttribute("disabled", true);
